@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:transparent_image/transparent_image.dart';
-
 import 'package:flutter_task/Models/MatchResponse.dart';
 import 'package:flutter_task/Models/TeamResponse.dart';
-import 'package:confetti/confetti.dart';
-import 'dart:math';
 import 'package:flutter_task/Services/DataService.dart';
 import 'package:flutter_task/Views/Widgets/ResponsiveWidget.dart';
+
+import 'package:transparent_image/transparent_image.dart';
+import 'package:confetti/confetti.dart';
+import 'dart:math';
 
 class DetailsPage extends StatefulWidget {
   late String code;
@@ -23,7 +22,6 @@ class _DetailsPageState extends State<DetailsPage> {
   DataService dataServices = DataService();
   late TeamResponse tResponse;
   late List<Teams> teamList = [];
-  late List<Matches> matchList = [];
   late List<Map<String, dynamic>> winners = [];
   late List<Map<String, dynamic>> draws = [];
   late List<Map<String, dynamic>> winCount = [];
@@ -33,37 +31,14 @@ class _DetailsPageState extends State<DetailsPage> {
   fetchTeamData() async {
     tResponse = await dataServices.getTeamData(widget.code);
     teamList = tResponse.teams;
+
     await mostWins(tResponse.season.endDate);
     setState(() {});
-    // if (matchResponse.filters.status.toString() == "IN_PLAY") {
-    //   dateTo = DateTime.now().toString();
-    //   dateFrom = DateTime.now().subtract(const Duration(days: 30)).toString();
-    // }
-    // else if (matchResponse.filters.status.toString() == "FINISHED") {
-    //   dateTo = matchResponse.matches.first.season.endDate.toString();
-    //   dateFrom = DateTime.parse(dateTo).subtract(const Duration(days: 30)).toString();
-    //
-    //   await mostWins();
-    //   setState(() {});
-    // }
-    // matchResponse = await dataServices.getMatchData(widget.code,dateTo,dateFrom);
-    // matchList = matchResponse.matches;
-
-    // if (matchResponse.filters.status.toString() == "IN_PLAY") {
-    //   dateTo = DateTime.now().toString();
-    //   dateFrom = DateTime.now().subtract(const Duration(days: 30)).toString();
-    // }
-    // else if (matchResponse.filters.status.toString() == "FINISHED") {
-    //   dateTo = matchResponse.matches.first.season.endDate.toString();
-    //   dateFrom = DateTime.parse(dateTo).subtract(const Duration(days: 30)).toString();
-    //
-    //   await mostWins();
-    //   setState(() {});
-    // }
   }
 
   mostWins(String endDate) async {
-    matchResponse = await dataServices.getMatchData(widget.code, DateTime.parse(endDate).subtract(Duration(days: 30)).toString(),
+    matchResponse = await dataServices.getMatchData(widget.code,
+        DateTime.parse(endDate).subtract(Duration(days: 30)).toString(),
         DateTime.now().toString());
     print(matchResponse.toJson());
     matchResponse.matches.forEach((match) {
@@ -93,14 +68,15 @@ class _DetailsPageState extends State<DetailsPage> {
     print(winner?.name);
   }
 
-
   late ConfettiController _controllerCenter;
   @override
   void initState() {
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 4));
     super.initState();
-    fetchTeamData().whenComplete(() => {setState(() {})});
+    fetchTeamData();
+
+    setState(() {});
   }
 
   void dispose() {
@@ -189,7 +165,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   onPressed: () {
                                     _controllerCenter.play();
                                   },
-                                  child: Card(
+                                  child:
+                                  Card(
                                       elevation: 15,
                                       color: Colors.white,
                                       shadowColor: Colors.lightBlue,
@@ -200,35 +177,41 @@ class _DetailsPageState extends State<DetailsPage> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                         children: [
-                                          Column(
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  winner!.name.toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                      FontWeight.bold),
+                                          Container(
+                                            child: Column(
+                                              children: [
+                                                Center(
+                                                  child: Text(
+                                                    winner?.name.toString() ??
+                                                        "No winners",
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                        fontSize: 30,
+                                                        fontWeight:
+                                                        FontWeight.bold),
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets.all(10.0),
-                                                child: Container(
-                                                    height: 120,
-                                                    width: 120,
-                                                    child: ClipRRect(
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(30),
-                                                        child:
-                                                        SvgPicture.network(
-                                                          winner!.crestUrl
-                                                              .toString(),
-                                                          fit: BoxFit.cover,
-                                                        ))),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Container(
+                                                      height: 120,
+                                                      width: 120,
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(30),
+                                                          child: SvgPicture
+                                                              .network(
+                                                            winner?.crestUrl
+                                                                .toString() ??
+                                                                "",
+                                                            fit: BoxFit.cover,
+                                                          ))),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       )),
@@ -327,95 +310,45 @@ class _DetailsPageState extends State<DetailsPage> {
                                             mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                             children: [
-                                              Container(
-                                                child: Column(
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        winner?.name.toString() ??
-                                                            "No winners",
-                                                        overflow:
-                                                        TextOverflow.ellipsis,
-                                                        maxLines: 2,
-                                                        style: const TextStyle(
-                                                            fontSize: 30,
-                                                            fontWeight:
-                                                            FontWeight.bold),
-                                                      ),
+                                              Column(
+                                                children: [
+                                                  Center(
+                                                    child: Text(
+                                                      tResponse
+                                                          .season.winner!.name
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                          FontWeight.bold),
                                                     ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(
-                                                          10.0),
-                                                      child: Container(
-                                                          height: 120,
-                                                          width: 120,
-                                                          child: ClipRRect(
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(30),
-                                                              child: SvgPicture
-                                                                  .network(
-                                                                winner?.crestUrl
-                                                                    .toString() ??
-                                                                    "",
-                                                                fit: BoxFit.cover,
-                                                              ))),
-                                                    ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        10.0),
+                                                    child: Container(
+                                                        height: 120,
+                                                        width: 120,
+                                                        child: ClipRRect(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                30),
+                                                            child: SvgPicture
+                                                                .network(
+                                                              tResponse
+                                                                  .season
+                                                                  .winner!
+                                                                  .crestUrl
+                                                                  .toString(),
+                                                              fit: BoxFit.cover,
+                                                            ))),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           )),
-                                      // Card(
-                                      //     elevation: 15,
-                                      //     color: Colors.white,
-                                      //     shadowColor: Colors.lightBlue,
-                                      //     shape: RoundedRectangleBorder(
-                                      //         borderRadius:
-                                      //         BorderRadius.circular(25)),
-                                      //     child: Row(
-                                      //       mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceAround,
-                                      //       children: [
-                                      //         Column(
-                                      //           children: [
-                                      //             Center(
-                                      //               child: Text(
-                                      //                 tResponse
-                                      //                     .season.winner!
-                                      //                     .toString(),
-                                      //                 style: const TextStyle(
-                                      //                     fontSize: 30,
-                                      //                     fontWeight:
-                                      //                     FontWeight.bold),
-                                      //               ),
-                                      //             ),
-                                      //             Padding(
-                                      //               padding:
-                                      //               const EdgeInsets.all(
-                                      //                   10.0),
-                                      //               child: Container(
-                                      //                   height: 120,
-                                      //                   width: 120,
-                                      //                   child: ClipRRect(
-                                      //                       borderRadius:
-                                      //                       BorderRadius
-                                      //                           .circular(
-                                      //                           30),
-                                      //                       child: SvgPicture
-                                      //                           .network(
-                                      //                         tResponse
-                                      //                             .season
-                                      //                             .winner!.name
-                                      //
-                                      //                             .toString(),
-                                      //                         fit: BoxFit.cover,
-                                      //                       ))),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //       ],
-                                      //     )),
                                     ));
                               } else {
                                 return const CircularProgressIndicator();

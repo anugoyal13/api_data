@@ -1,6 +1,5 @@
 class TeamResponse {
   late int count;
-  //late  Filters filters;
   late Competition competition;
   late Season season;
   late List<Teams> teams;
@@ -13,7 +12,6 @@ class TeamResponse {
 
   TeamResponse.fromJson(Map<String, dynamic> json) {
     count = json['count'];
-    // filters = (json['filters'] != null ? new Filters.fromJson(json['filters']) : null)!;
     competition = (json['competition'] != null
         ? new Competition.fromJson(json['competition'])
         : null)!;
@@ -30,9 +28,6 @@ class TeamResponse {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['count'] = this.count;
-    // if (this.filters != null) {
-    //   data['filters'] = this.filters.toJson();
-    // }
     if (this.competition != null) {
       data['competition'] = this.competition.toJson();
     }
@@ -46,19 +41,6 @@ class TeamResponse {
   }
 }
 
-// class Filters {
-//
-//
-//   Filters({});
-//
-// Filters.fromJson(Map<String, dynamic> json) {
-// }
-
-// Map<String, dynamic> toJson() {
-//   final Map<String, dynamic> data = new Map<String, dynamic>();
-//   return data;
-// }
-// }
 
 class Competition {
   late int id;

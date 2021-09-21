@@ -115,11 +115,10 @@ class Matches {
   late String stage;
   String? group;
   late String lastUpdated;
-  late Odds odds;
   late Score score;
   late Area homeTeam;
   late Area awayTeam;
-  // late List<Referees> referees;
+
 
   Matches(
       {required this.id,
@@ -130,11 +129,9 @@ class Matches {
         required this.stage,
         required this.group,
         required this.lastUpdated,
-        required this.odds,
         required this.score,
         required this.homeTeam,
         required this.awayTeam,});
-  //required this.referees});
 
   Matches.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -146,19 +143,12 @@ class Matches {
     stage = json['stage'];
     group = json['group'];
     lastUpdated = json['lastUpdated'];
-    odds = (json['odds'] != null ? new Odds.fromJson(json['odds']) : null)!;
     score = (json['score'] != null ? new Score.fromJson(json['score']) : null)!;
     homeTeam =
     (json['homeTeam'] != null ? new Area.fromJson(json['homeTeam']) : null)!;
     awayTeam =
     (json['awayTeam'] != null ? new Area.fromJson(json['awayTeam']) : null)!;
-    // if (json['referees'] != null) {
-    //   referees = <Referees>[];
-    //   json['referees'].forEach((v) {
-    //     referees.add(new Referees.fromJson(v));
-    //   });
-    // }
-  }
+     }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -172,9 +162,6 @@ class Matches {
     data['stage'] = this.stage;
     data['group'] = this.group;
     data['lastUpdated'] = this.lastUpdated;
-    if (this.odds != null) {
-      data['odds'] = this.odds.toJson();
-    }
     if (this.score != null) {
       data['score'] = this.score.toJson();
     }
@@ -184,9 +171,6 @@ class Matches {
     if (this.awayTeam != null) {
       data['awayTeam'] = this.awayTeam.toJson();
     }
-    // if (this.referees != null) {
-    //   data['referees'] = this.referees.map((v) => v.toJson()).toList();
-    // }
     return data;
   }
 }
@@ -216,21 +200,7 @@ class Season {
   }
 }
 
-class Odds {
-  late String msg;
 
-  Odds({required this.msg});
-
-  Odds.fromJson(Map<String, dynamic> json) {
-    msg = json['msg'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['msg'] = this.msg;
-    return data;
-  }
-}
 
 class Score {
   late String winner;
@@ -238,7 +208,7 @@ class Score {
   late FullTime fullTime;
   late FullTime halfTime;
   late FullTime extraTime;
-  //late Penalties penalties;
+
 
   Score(
       {required this.winner,
@@ -304,46 +274,4 @@ class FullTime {
   }
 }
 
-// class Penalties {
-//   Null homeTeam;
-//   Null awayTeam;
-//
-//   Penalties({this.homeTeam, this.awayTeam});
-//
-//   Penalties.fromJson(Map<String, dynamic> json) {
-//     homeTeam = json['homeTeam'];
-//     awayTeam = json['awayTeam'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['homeTeam'] = this.homeTeam;
-//     data['awayTeam'] = this.awayTeam;
-//     return data;
-//   }
-// }
 
-// class Referees {
-//   int id;
-//   String name;
-//   String role;
-//   String nationality;
-//
-//   Referees({this.id, this.name, this.role, this.nationality});
-//
-//   Referees.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     name = json['name'];
-//     role = json['role'];
-//     nationality = json['nationality'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['id'] = this.id;
-//     data['name'] = this.name;
-//     data['role'] = this.role;
-//     data['nationality'] = this.nationality;
-//     return data;
-//   }
-// }

@@ -5,7 +5,6 @@ import 'dart:convert';
 
 class DataService{
 
-
   Future<TeamResponse> getTeamData(String comp_code) async{
     Response response= await get(Uri.parse("http://api.football-data.org/v2/competitions/${comp_code}/teams"),
         headers:{

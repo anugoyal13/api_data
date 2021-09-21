@@ -31,6 +31,7 @@ class _TeamPageState extends State<TeamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       // backgroundColor: Colors.blue[50],
         floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.black,
             child: Text(
@@ -48,10 +49,12 @@ class _TeamPageState extends State<TeamPage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 5,
-          title: Text(
-            " Participants Teams ",
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontFamily: 'Overpass'),
+          title: Center(
+            child: Text(
+              " Participants Teams in "+widget.code,
+              style: TextStyle(
+                  color: Colors.white, fontSize: 25, fontFamily: 'Overpass'),
+            ),
           ),
           centerTitle: true,
         ),
