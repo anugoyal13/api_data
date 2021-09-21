@@ -1,12 +1,9 @@
-import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_task/Models/MatchResponse.dart';
 import 'package:flutter_task/Models/TeamResponse.dart';
 import 'package:flutter_task/Services/DataService.dart';
 import 'package:flutter_task/Views/Widgets/ResponsiveWidget.dart';
-
 import 'package:transparent_image/transparent_image.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
@@ -37,7 +34,8 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   mostWins(String endDate) async {
-    matchResponse = await dataServices.getMatchData(widget.code,
+    matchResponse = await dataServices.getMatchData(
+        widget.code,
         DateTime.parse(endDate).subtract(Duration(days: 30)).toString(),
         DateTime.now().toString());
     print(matchResponse.toJson());
@@ -64,7 +62,7 @@ class _DetailsPageState extends State<DetailsPage> {
         .sort((a, b) => a.entries.first.value.compareTo(b.entries.first.value));
     print(winCount.last.entries.first.key);
     winner = teamList.singleWhere(
-            (element) => element.id == int.parse(winCount.last.entries.first.key));
+        (element) => element.id == int.parse(winCount.last.entries.first.key));
     print(winner?.name);
   }
 
@@ -75,7 +73,6 @@ class _DetailsPageState extends State<DetailsPage> {
         ConfettiController(duration: const Duration(seconds: 4));
     super.initState();
     fetchTeamData();
-
     setState(() {});
   }
 
@@ -102,12 +99,16 @@ class _DetailsPageState extends State<DetailsPage> {
                       height: 70,
                       width: 450,
                       child: Center(
-                        child: Text(
-                          " Winner Team ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              fontFamily: "Playball"),
+                        child: Flexible(
+                          child: Text(
+                            " The team who won the most matches ",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                fontFamily: "Playball"),
+                          ),
                         ),
                       ),
                     ),
@@ -123,7 +124,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     fadeInDuration: Duration(seconds: 1),
                     fadeOutDuration: Duration(seconds: 2),
                     image:
-                    'https://image.freepik.com/free-photo/finger-conference-row-competition-training_1134-884.jpg',
+                        'https://image.freepik.com/free-photo/finger-conference-row-competition-training_1134-884.jpg',
                   ),
                   SizedBox(
                     height: 40,
@@ -156,8 +157,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Container(
-                                height: 200,
-                                width: 300,
+
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: Colors.black12),
@@ -165,55 +165,73 @@ class _DetailsPageState extends State<DetailsPage> {
                                   onPressed: () {
                                     _controllerCenter.play();
                                   },
-                                  child:
-                                  Card(
+                                  child: Card(
                                       elevation: 15,
                                       color: Colors.white,
                                       shadowColor: Colors.lightBlue,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(25)),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Container(
-                                            child: Column(
-                                              children: [
-                                                Center(
-                                                  child: Text(
-                                                    winner?.name.toString() ??
-                                                        "No winners",
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    style: const TextStyle(
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                        FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Container(
-                                                      height: 120,
-                                                      width: 120,
-                                                      child: ClipRRect(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(30),
-                                                          child: SvgPicture
-                                                              .network(
-                                                            winner?.crestUrl
+                                              BorderRadius.circular(25)),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height *
+                                            0.3,
+                                        width:
+                                        MediaQuery.of(context).size.width * 0.7,
+
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child: Column(
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        winner?.name.toString() ??
+                                                            " ",
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontSize: 30,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10,),
+                                                    Center(
+                                                      child: Text(
+                                                        winner?.tla.toString() ??
+                                                            " ",
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10,),
+                                                    Center(
+                                                      child: Text(
+                                                        winner?.address
                                                                 .toString() ??
-                                                                "",
-                                                            fit: BoxFit.cover,
-                                                          ))),
+                                                            " ",
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       )),
                                 ));
                           } else {
@@ -228,18 +246,15 @@ class _DetailsPageState extends State<DetailsPage> {
                   FadeInImage.memoryNetwork(
                     alignment: Alignment.center,
                     placeholder: kTransparentImage,
-                    height: 400,
-                    width: 450,
+                    height: 250,
+                    width: 300,
                     fit: BoxFit.cover,
                     fadeOutCurve: Curves.easeInOut,
                     fadeInDuration: Duration(seconds: 1),
                     fadeOutDuration: Duration(seconds: 2),
                     image:
-                    'https://image.freepik.com/free-photo/finger-conference-row-competition-training_1134-884.jpg',
+                        'https://image.freepik.com/free-photo/finger-conference-row-competition-training_1134-884.jpg',
                   ),
-                  //  SizedBox(
-                  //   height: 40,
-                  // ),
                   ConfettiWidget(
                     confettiController: _controllerCenter,
                     blastDirectionality: BlastDirectionality.explosive,
@@ -249,7 +264,6 @@ class _DetailsPageState extends State<DetailsPage> {
                     numberOfParticles: 30,
                     maxBlastForce: 100,
                     minBlastForce: 80,
-                    //gravity: 0.3,
 
                     colors: const [
                       Colors.green,
@@ -271,12 +285,15 @@ class _DetailsPageState extends State<DetailsPage> {
                           height: 70,
                           width: 450,
                           child: Center(
-                            child: Text(
-                              " Winner Team ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  fontFamily: "Playball"),
+                            child: Flexible(
+                              child: Text(
+                                " The Team who won the most matches",
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    fontFamily: "Playball"),
+                              ),
                             ),
                           ),
                         ),
@@ -290,8 +307,10 @@ class _DetailsPageState extends State<DetailsPage> {
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return Container(
-                                    height: 200,
-                                    width: 300,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         color: Colors.black12),
@@ -305,42 +324,64 @@ class _DetailsPageState extends State<DetailsPage> {
                                           shadowColor: Colors.lightBlue,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(25)),
+                                                  BorderRadius.circular(25)),
                                           child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                                MainAxisAlignment.spaceAround,
                                             children: [
                                               Column(
                                                 children: [
                                                   Center(
-                                                    child: Text(
-                                                      winner?.name.toString() ??
-                                                          "No winners",
-                                                      overflow: TextOverflow.ellipsis,
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          fontSize: 30,
-                                                          fontWeight:
-                                                          FontWeight.bold),
+                                                    child: Flexible(
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            winner?.name
+                                                                    .toString() ??
+                                                                " ",
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 3,
+                                                            style: const TextStyle(
+                                                                fontSize: 30,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            winner?.tla
+                                                                    .toString() ??
+                                                                " ",
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 3,
+                                                            style: const TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            winner?.address
+                                                                    .toString() ??
+                                                                " ",
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 3,
+                                                            style: const TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.all(10.0),
-                                    child: Container(
-                                        height: 120,
-                                        width: 120,
-                                        child: ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                30),
-                                            child: SvgPicture.network(
-                                              winner?.crestUrl
-                                                  .toString() ??
-                                                  "",
-                                              fit: BoxFit.cover,
-                                            ))),
-                                  ) ],
+                                                ],
                                               ),
                                             ],
                                           )),
