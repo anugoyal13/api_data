@@ -314,38 +314,33 @@ class _DetailsPageState extends State<DetailsPage> {
                                                 children: [
                                                   Center(
                                                     child: Text(
-                                                      tResponse
-                                                          .season.winner!.name
-                                                          .toString(),
+                                                      winner?.name.toString() ??
+                                                          "No winners",
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 2,
                                                       style: const TextStyle(
                                                           fontSize: 30,
                                                           fontWeight:
                                                           FontWeight.bold),
                                                     ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                    const EdgeInsets.all(
-                                                        10.0),
-                                                    child: Container(
-                                                        height: 120,
-                                                        width: 120,
-                                                        child: ClipRRect(
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                30),
-                                                            child: SvgPicture
-                                                                .network(
-                                                              tResponse
-                                                                  .season
-                                                                  .winner!
-                                                                  .crestUrl
-                                                                  .toString(),
-                                                              fit: BoxFit.cover,
-                                                            ))),
-                                                  ),
-                                                ],
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.all(10.0),
+                                    child: Container(
+                                        height: 120,
+                                        width: 120,
+                                        child: ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                30),
+                                            child: SvgPicture.network(
+                                              winner?.crestUrl
+                                                  .toString() ??
+                                                  "",
+                                              fit: BoxFit.cover,
+                                            ))),
+                                  ) ],
                                               ),
                                             ],
                                           )),
