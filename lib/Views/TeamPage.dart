@@ -35,7 +35,7 @@ class _TeamPageState extends State<TeamPage> {
             backgroundColor: Colors.black,
             child: Text(
               "Go",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(color:Colors.white,fontSize: 30, fontWeight: FontWeight.bold),
             ),
             onPressed: () {
               Navigator.push(
@@ -45,6 +45,16 @@ class _TeamPageState extends State<TeamPage> {
                             ,
                            )));
             }),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          elevation: 5,
+          title: Text(
+            " Participants Teams ",
+            style: TextStyle(
+                color: Colors.white, fontSize: 25, fontFamily: 'Overpass'),
+          ),
+          centerTitle: true,
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -5,6 +5,7 @@ import 'dart:convert';
 
 class DataService{
 
+
   Future<TeamResponse> getTeamData(String comp_code) async{
     Response response= await get(Uri.parse("http://api.football-data.org/v2/competitions/${comp_code}/teams"),
         headers:{
@@ -21,11 +22,22 @@ class DataService{
     }
   }
 
-  Future<MatchResponse> getMatchData(String comp_code,) async{
-    Response response= await get(Uri.parse("http://api.football-data.org/v2/competitions/${comp_code}/matches"),
-        headers:{
-          "X-Auth-Token":"27873aa8851b418ba6cc7d51defddce4"
-        });
+  Future<MatchResponse> getMatchData(String comp_code,String dateTo,String dateFrom) async{
+    final queryParams = {
+      "dateFrom": "2021-09-01",
+      "dateTo": "2021-09-20",
+      "status": "FINISHED"
+    };
+    Uri uri = Uri(
+        scheme: "http",
+        host: "api.football-data.org",
+        path: "/v2/competitions/2021/matches",
+        queryParameters: queryParams);
+    try {
+      Response response = await get(
+        uri,
+        headers: {"X-Auth-Token": "27873aa8851b418ba6cc7d51defddce4"},
+      );
     if(response.statusCode==200){
       print(response.statusCode);
       MatchResponse matchResponse=MatchResponse.fromJson(json.decode(response.body));
@@ -33,7 +45,11 @@ class DataService{
       return matchResponse;
     }
     else{
+      print(response.statusCode);
       throw Exception("Invalid status code");
+    }
+    } catch (e) {
+      return MatchResponse.fromJson({});
     }
   }
 }

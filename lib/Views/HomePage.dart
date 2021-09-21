@@ -13,8 +13,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-      child: Column(
-        children: [
+          child: Column(
+          children: [
           SizedBox(
             height: 80,
           ),
@@ -29,19 +29,13 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          // VxBox(
-          //   child: Image.asset("assets/trophy.png"),
-          // ).height(300).width(300).makeCentered().pOnly(top: 50),
-          // ListView(
-          //  children: [
           Container(
             height: 550,
             width: 1150,
             child: ListView(children: [
               GridView.count(
-                //scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                crossAxisCount: 3,
+                crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
                 children: [
